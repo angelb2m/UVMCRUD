@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /productos/{document=**} {
+      // Permitir lectura a todos
+      allow read: if true;
+
+      // Permitir escritura solo si hay menos de 100 documentos
+      allow create: if get(/databases/$(database)/documents/productos).size() < 100;
+      allow update, delete: if true;
+    }
+  }
+}
